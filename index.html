@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>JS + CSS Clock</title>
+</head>
+<body>
+
+
+    <div class="clock">
+      <div class="clock-face">
+        <div class="numbers">
+          <div>12</div>
+          <div class="numbers-center">
+            <div>9</div>
+            <div class="center"></div>
+            <div>3</div>
+          </div>
+          <div>6</div>
+        </div>
+        <div class="hand hour-hand"></div>
+        <div class="hand min-hand"></div>
+        <div class="hand second-hand" id="myDIV"></div>
+      </div>
+    </div>
+
+
+  <style>
+    html {
+      background: antiqueWhite;
+      font-family: 'helvetica neue';
+      text-align: center;
+      font-size: 10px;
+    }
+
+    body {
+      margin: 0;
+      font-size: 2rem;
+      display: flex;
+      flex: 1;
+      min-height: 100vh;
+      align-items: center;
+    }
+
+    .clock {
+      width: 35rem;
+      height: 35rem;
+      background-color: darkseagreen;
+      border: 10px solid lightGrey;
+      border-radius: 50%;
+      margin: 50px auto;
+      position: relative;
+      padding: 2rem;
+      box-shadow:
+        0 0 0 4px rgba(0,0,0,0.1),
+        inset 0 0 0 3px #EFEFEF,
+        inset 0 0 10px #2d2929,
+        0 0 10px rgba(0,0,0,0.2);
+    }
+
+    .clock-face {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      /* transform: translateY(-3px); /* account for the height of the clock hands */ */
+    }
+
+    .numbers  {
+      color: #2d2929;
+      display: flex;
+      flex-direction: column;
+      font-size: 3rem;
+      font-weight: bold;
+      height: 100%;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .numbers-center {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .hand {
+      width: 50%;
+      height: 6px;
+      background: #2d2929;
+      box-shadow: 8px 2px 11px 0px black;
+      position: absolute;
+      top: 50%;
+
+      transform-origin: 100%;
+      transform: rotate(90deg);
+      transition: all 0.05s;
+      transition-timing-function: cubic-bezier(0.1, 2.7, 0.58, 1);
+    }
+    .second-hand {
+      background: tomato;
+      height: 3px;
+      right: 50%;
+      width: 40%;
+    }
+
+    .center {
+      align-self: center;
+      background-color: #2d2929;
+      border: tomato solid 3px;
+      border-radius: 50%;
+      content: "";
+      height: 1.5rem;
+      width: 1.5rem;
+      z-index: 1;
+    }
+
+    .min-hand {
+      right: 50%;
+      width: 37%;
+    }
+
+    .hour-hand {
+      width: 30%;
+      height: 9px;
+      right: 50%;
+    }
+
+  </style>
+
+  <script>
+    const secondHand = document.querySelector('.second-hand');
+    const minuteHand = document.querySelector('.min-hand');
+    const hourHand = document.querySelector('.hour-hand');
+    let start = 0
+
+    var totalSeconds = 0;
+    var totalMinutes = 0;
+
+    function setDate() {
+      const now = new Date();
+
+      const seconds = now.getSeconds();
+      if(seconds == 0)
+        secondHand.style.transitionDuration = '0s';
+      if(seconds == 1)
+        secondHand.style.transitionDuration = '0.05s';
+
+      const secondsDegrees = (( (totalSeconds + seconds) / 60) * 360) + 90;
+      secondHand.style.transform = `rotate(${secondsDegrees}deg)`;
+
+      const minutes = now.getMinutes();
+      if(minutes == 0 && seconds == 0) totalMinutes += 60;
+
+      const minuteDegrees = (( (totalMinutes + minutes) / 60 ) * 360) + 90;
+      minuteHand.style.transform = `rotate(${minuteDegrees}deg)`;
+
+      const hours = now.getHours();
+      const hourDegrees = ((hours/ 12) * 360) + 90;
+      hourHand.style.transform = `rotate(${hourDegrees}deg)`;
+
+      // boxShadow();
+    }
+
+    setInterval(setDate, 1000);
+
+    setDate();
+
+
+    // function boxShadow() {
+    //   const shadowLength = 50 * Math.sin( start ) + 'px';
+    //   secondHand.style.boxShadow = `8px 2px 11px ${shadowLength} black`;
+    //   start += 0.05;
+    // }
+
+  </script>
+</body>
+</html>
